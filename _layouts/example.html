@@ -15,8 +15,8 @@ class: box
   position:absolute;
   width:100%;
   height:100%;
-  top:0px;
-  left:0px;
+  top:0;
+  left:0;
   }
 
 #demo {
@@ -30,13 +30,13 @@ class: box
 #demo label { display:inline; }
 
 #snippet {
+  background:#fff;
   position:relative;
   overflow:hidden;
-  background:#fff;
   }
-  #snippet .buttons {
+  #snippet .button {
     position:absolute;
-    top:0px; right:0px;
+    bottom:20px; right:20px;
     z-index:1;
     }
 
@@ -46,19 +46,26 @@ pre {
   }
 pre:hover { background:transparent; }
 pre a {
+  background:#EAF4F8;
   border:0;
   padding:0;
-  background:#EAF4F8;
-  box-shadow:#EAF4F8 0 0 0 2px;
+  -webkit-box-shadow: 0 0 2px #EAF4F8;
+          box-shadow: 0 0 2px #EAF4F8;
   }
 
 .code-header *,
 .code-footer * { color:#999; }
 
+.doc-footer {
+  border-top:1px solid #ccc;
+  text-align:center;
+  border-left:0;
+  }
+
+
 @media (max-width:640px) {
   .doc-example { border-bottom:1px solid #ccc; border-left:0px; }
   .doc-nav {
-    border-right:none;
     margin-right:0;
     }
   }
@@ -82,8 +89,11 @@ pre a {
 <div class='doc-page pad3c fillM clearfix'>
 <div class='fillW clearfix'>
   <div class='cell3'>
-    <div class='clearfix'>&nbsp;</div>
     <div class='doc-nav'>
+      <form class='doc-search'>
+        <input type='text' placeholder='Filter examples'>
+        <span class='icon search'></span>
+      </form>
       <ul class='nav pages'>
       <li><a {% if page.url == '/examples/index.html' %}class='active'{% endif %} href='{{site.baseurl}}/examples'>A simple map</a></li>
       {% for item in site.categories.example reversed %}
@@ -99,9 +109,7 @@ pre a {
     </div>
     <div id='demo' class='doc'>{{content}}</div>
     <div id='snippet' class='doc'>
-    <div class='buttons pad2 fillW'>
-      <a class='button big' href='#' id='copy'><span class='icon embed reverse'></span> Select all</a>
-    </div>
+    <a class='button big' href='#' id='copy'><span class='icon embed reverse'></span> Select all</a>
     <div id='code' class='doc'>
     <pre class='prettyprint code-header'>
 &lt;!DOCTYPE html&gt;
@@ -121,9 +129,16 @@ pre a {
 &lt;/html&gt;</pre>
     </div>
     </div>
+    <div class='doc-footer'>
+      <div class='pad2'>
+        The code and documentation to <a href='http://github.com/mapbox/mapbox.js'>mapbox.js is hosted on GitHub</a> where you can contribute changes and improvements.
+      </div>
+    </div>
   </div>
 </div>
 </div>
+
+{% include developers-footer.html %}
 
 <script>
   $(document).ready(function () {
@@ -133,7 +148,7 @@ pre a {
     example.colorCode(function(){
         example.bindHints("{{ site.version }}");
     });
-    example.bindSearch();
+    example.bindSearch($('.doc-search input'), $('.doc-nav ul'), false);
   });
   $(mapbox.docs);
 </script>

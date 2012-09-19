@@ -5,13 +5,25 @@ class: box
 ---
 
 <style>
-  .doc li p {margin:0;}
-  .parent {font-weight:bold;}
+.doc li p {margin:0;}
+.parent {font-weight:bold;}
+.doc-footer {
+  border-top:1px solid #ccc;
+  border-left:1px solid #ccc;
+  text-align:center;
+  }
+
+@media only screen and (max-width: 640px) {
+  .doc-footer {
+    border-left:none;
+  }
+}
 </style>
 
 <div class='clearfix doc-header pad3 fillL'>
   <div class='cell8'>
     <h2>{{page.title}}</h2>
+    <p>{{site.description}}</p>
   </div>
   <ul class='cell4 doc-subnav clearfix'>
     <li><a href='{{site.baseurl}}/api/'>API</a></li>
@@ -23,11 +35,10 @@ class: box
 <div class='doc-page pad3c fillM clearfix'>
 <div class='fillW clearfix'>
   <div class='cell3'>
-    <div class='clearfix'>&nbsp;</div>
     <div class='doc-nav'>
       <ul class='nav anchors'>
       {% for item in page.releases %}
-        <li class='parent'><a href='#{{item.version|replace:' ','_'}}'>{{item.version}}</a></li>
+        <li class='parent'><a href='#{{item.version|replace:' ', '_'}}'>{{item.version}}</a></li>
       {% endfor %}
       </ul>
     </div>
@@ -36,7 +47,7 @@ class: box
     <div id='docs' class='doc-content prose'>
       <div class='doc pad2'>
         {% for item in page.releases %}
-          <h2 id='{{item.version}}'>{{item.version}} {% if item.date %}<small>{{item.date|date:'%B %d %Y'}}</small>{% endif %}</h2>
+          <h2 id='{{item.version|replace:' ', '_'}}'>{{item.version}} {% if item.date %}<small>{{item.date|date:'%B %d %Y'}}</small>{% endif %}</h2>
           <ul class='checklist'>
             {% for item in item.notes %}
             <li class='check'>{{item | markdownify}}</li>
@@ -45,9 +56,16 @@ class: box
         {% endfor %}
       </div>
     </div>
+    <div class='doc-footer'>
+      <div class='pad2'>
+        The code and documentation to <a href='http://github.com/mapbox/mapbox.js'>mapbox.js is hosted on GitHub</a> where you can contribute changes and improvements.
+      </div>
+    </div>
   </div>
 </div>
 </div>
+
+{% include developers-footer.html %}
 
 <script>
   $(mapbox.docs);
