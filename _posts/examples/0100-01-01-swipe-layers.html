@@ -36,17 +36,23 @@ tags:
     <div id='handle'>drag</div>
 </div>
 <div id='map'></div>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+<![endif]-->
+<script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
 <script>
-  var map = mapbox.map('map'),
-      layers = document.getElementById('layers');
+  var map = L.map('map').setView([0, 0], 3);
 
-  map.addLayer(mapbox.layer().id('examples.map-a1dcgmtr').composite(false));
-  map.addLayer(mapbox.layer().id('examples.map-20v6611k').composite(false));
-  map.zoom(3);
-  map.ui.attribution.add()
-      .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');
+  L.tileLayer('http://a.tiles.mapbox.com/v3/examples.map-a1dcgmtr/{z}/{x}/{y}.png', {
+      attribution: '<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>'
+  }).addTo(map);
 
-  var l_parent = map.getLayerAt(1).parent,
+  var layer = L.tileLayer('http://a.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png', {
+      attribution: '<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>'
+  }).addTo(map);
+
+  var l_parent = layer._container,
       handle = document.getElementById('handle'),
       dragging = false;
 
@@ -54,11 +60,11 @@ tags:
   document.onmouseup = function() { dragging = false; }
   document.onmousemove = function(e) {
       if (!dragging) return;
-      setDivide(MM.getMousePoint(e, map).x);
+      setDivide(map.mouseEventToLayerPoint(e).x);
   }
 
   function setDivide(x) {
-      x = Math.max(0, Math.min(x, map.dimensions.x));
+      x = Math.max(0, Math.min(x, map.getSize().x));
       handle.style.left = (x - 20) + 'px';
       l_parent.style.clip = 'rect(0px ' + x + 'px 9999999px 0px)';
   }
